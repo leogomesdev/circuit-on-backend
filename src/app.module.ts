@@ -4,7 +4,6 @@ import { AppConfigurationModule } from './infrastructure/configuration/app-confi
 import { AppConfigurationService } from './infrastructure/configuration/app-configuration.service';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { RouterModule } from '@nestjs/core';
 import { SchedulesModule } from './schedules/schedules.module';
 
 @Module({

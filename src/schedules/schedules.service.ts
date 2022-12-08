@@ -28,7 +28,7 @@ export class SchedulesService {
   }
 
   update(id: number, updateScheduleDto: UpdateScheduleDto) {
-    return `This action updates a #${id} schedule`;
+    return `This action updates a #${id} schedule using ${updateScheduleDto}`;
   }
 
   remove(id: number) {
