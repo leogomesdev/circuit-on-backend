@@ -1,26 +1,130 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { Db, InsertOneResult } from 'mongodb';
+import { plainToInstance } from 'class-transformer';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
-import { SchedulesRepository } from './schedules.repository';
-import { CurrentSchedule } from './entities/current-schedule.entity';
-import { Schedule } from './entities/schedule.entity';
+import { CurrentSchedule } from './interfaces/current-schedule.interface';
+import { Schedule } from '../schemas/schedule.schema';
 
 @Injectable()
 export class SchedulesService {
+  private collectionName = 'schedules';
   constructor(
-    @Inject(SchedulesRepository)
-    private schedulesRepository: SchedulesRepository,
+    @Inject('DATABASE_CONNECTION')
+    private db: Db,
   ) {}
-  create(createScheduleDto: CreateScheduleDto) {
-    return this.schedulesRepository.create(createScheduleDto);
+
+  async create(createScheduleDto: CreateScheduleDto): Promise<Schedule> {
+    const now = new Date();
+
+    const result: InsertOneResult<Document> = await this.db
+      .collection(this.collectionName)
+      .insertOne(
+        {
+          ...createScheduleDto,
+          createdAt: now,
+          updatedAt: now,
+          deletedAt: null,
+        },
+        { checkKeys: false },
+      );
+
+    return plainToInstance(Schedule, result.insertedId);
   }
 
-  findAll(): Promise<Schedule[]> {
-    return this.schedulesRepository.findAll();
+  async findAll(): Promise<Schedule[]> {
+    const results = await this.db
+      .collection(this.collectionName)
+      .find()
+      .toArray();
+
+    return plainToInstance(Schedule, results);
   }
 
-  getCurrentSchedule(): Promise<CurrentSchedule[]> {
-    return this.schedulesRepository.getCurrentSchedule();
+  async getCurrentSchedule(): Promise<CurrentSchedule[]> {
+    const aggPreviousLastImage = [
+      {
+        $match: {
+          scheduledTime: {
+            $lte: new Date(),
+          },
+        },
+      },
+      {
+        $sort: {
+          scheduledTime: -1,
+        },
+      },
+      { $limit: 1 },
+      {
+        $lookup: {
+          from: 'images',
+          localField: 'image._id',
+          foreignField: '_id',
+          as: 'data',
+        },
+      },
+      {
+        $project: {
+          type: 1,
+          backgroundColor: 1,
+          scheduledTime: 1,
+          data: {
+            $first: '$data.data',
+          },
+          title: { $first: '$data.title' },
+        },
+      },
+    ];
+
+    const aggNextImages = [
+      {
+        $match: {
+          scheduledTime: {
+            $gte: new Date(),
+          },
+        },
+      },
+      {
+        $sort: { scheduledTime: 1 },
+      },
+      { $limit: 7 },
+      {
+        $lookup: {
+          from: 'images',
+          localField: 'image._id',
+          foreignField: '_id',
+          as: 'data',
+        },
+      },
+      {
+        $project: {
+          type: 1,
+          backgroundColor: 1,
+          scheduledTime: 1,
+          data: {
+            $first: '$data.data',
+          },
+          title: { $first: '$data.title' },
+          title2: { $first: '$data.title' },
+        },
+      },
+    ];
+
+    const lastImage = await this.db
+      .collection(this.collectionName)
+      .aggregate(aggPreviousLastImage)
+      .toArray();
+
+    const nextImages = await this.db
+      .collection(this.collectionName)
+      .aggregate(aggNextImages)
+      .toArray();
+
+    return [
+      ...plainToInstance(Schedule, lastImage),
+      ...plainToInstance(Schedule, nextImages),
+    ];
   }
 
   findOne(id: number) {

@@ -10,10 +10,13 @@ import {
 import { SchedulesService } from './schedules.service';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
-import { CurrentSchedule } from './entities/current-schedule.entity';
-import { Schedule } from './entities/schedule.entity';
+import { CurrentSchedule } from './interfaces/current-schedule.interface';
+import { Schedule } from '../schemas/schedule.schema';
 
-@Controller('schedules')
+@Controller({
+  path: 'schedules',
+  version: '1',
+})
 export class SchedulesController {
   constructor(private readonly schedulesService: SchedulesService) {}
 

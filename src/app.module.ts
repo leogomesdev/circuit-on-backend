@@ -1,27 +1,18 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
-import { AppConfigurationModule } from './infrastructure/configuration/app-configuration.module';
-import { AppConfigurationService } from './infrastructure/configuration/app-configuration.service';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SchedulesModule } from './schedules/schedules.module';
+import { DatabaseModule } from './database/database.module';
+import { SharedModule } from './shared/shared.module';
+import configuration from './config/configuration';
 
 @Module({
   imports: [
-    AppConfigurationModule,
-    MongooseModule.forRootAsync({
-      imports: [AppConfigurationModule],
-      inject: [AppConfigurationService],
-      useFactory: (appConfigService: AppConfigurationService) => {
-        const options: MongooseModuleOptions = {
-          uri: appConfigService.connectionString,
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-        };
-        return options;
-      },
-    }),
+    ConfigModule.forRoot({ isGlobal: true, load: [configuration] }),
     SchedulesModule,
+    DatabaseModule,
+    SharedModule,
   ],
   controllers: [AppController],
   providers: [AppService],
