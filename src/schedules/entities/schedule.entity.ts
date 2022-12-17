@@ -8,16 +8,16 @@ class SubDocumentImageDto {
   title: string;
 
   @Expose()
-  backgroundColor: string;
+  category: string;
+
+  @Expose()
+  backgroundColor?: string;
 }
 
 @Exclude()
 export class Schedule {
   @Expose()
   scheduleId: string;
-
-  @Expose()
-  type: string;
 
   @Expose()
   image: SubDocumentImageDto;

@@ -6,7 +6,7 @@ export class CurrentSchedule {
   title: string;
 
   @Expose()
-  type: string;
+  category: string;
 
   @Expose()
   backgroundColor?: string;
