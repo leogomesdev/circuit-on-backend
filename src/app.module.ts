@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SchedulesModule } from './schedules/schedules.module';
 import { DatabaseModule } from './database/database.module';
+import { ImagesModule } from './images/images.module';
 import configuration from './config/configuration';
 
 @Module({
@@ -11,6 +12,7 @@ import configuration from './config/configuration';
     ConfigModule.forRoot({ isGlobal: true, load: [configuration] }),
     SchedulesModule,
     DatabaseModule,
+    ImagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
