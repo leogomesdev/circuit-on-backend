@@ -6,11 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { SchedulesService } from './schedules.service';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
-import { CurrentSchedule } from './interfaces/current-schedule.interface';
+import { CurrentSchedule } from '../schemas/current-schedule.schema';
 import { Schedule } from '../schemas/schedule.schema';
 
 @Controller({
@@ -35,21 +36,21 @@ export class SchedulesController {
     return this.schedulesService.getCurrentSchedule();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.schedulesService.findOne(+id);
+  @Get(':scheduleId')
+  findOne(@Param('scheduleId', ParseUUIDPipe) scheduleId: string) {
+    return this.schedulesService.findOne(scheduleId);
   }
 
-  @Patch(':id')
+  @Patch(':scheduleId')
   update(
-    @Param('id') id: string,
+    @Param('scheduleId', ParseUUIDPipe) scheduleId: string,
     @Body() updateScheduleDto: UpdateScheduleDto,
   ) {
-    return this.schedulesService.update(+id, updateScheduleDto);
+    return this.schedulesService.update(scheduleId, updateScheduleDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.schedulesService.remove(+id);
+  @Delete(':scheduleId')
+  remove(@Param('scheduleId', ParseUUIDPipe) scheduleId: string) {
+    return this.schedulesService.remove(scheduleId);
   }
 }

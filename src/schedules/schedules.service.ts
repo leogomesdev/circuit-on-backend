@@ -1,9 +1,15 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Db, InsertOneResult } from 'mongodb';
+import {
+  ConflictException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { Db, InsertOneResult, WithId, Document, DeleteResult } from 'mongodb';
 import { plainToInstance } from 'class-transformer';
+import { v4 as uuidv4 } from 'uuid';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
-import { CurrentSchedule } from './interfaces/current-schedule.interface';
+import { CurrentSchedule } from '../schemas/current-schedule.schema';
 import { Schedule } from '../schemas/schedule.schema';
 
 @Injectable()
@@ -15,44 +21,49 @@ export class SchedulesService {
   ) {}
 
   async create(createScheduleDto: CreateScheduleDto): Promise<Schedule> {
-    const now = new Date();
+    const scheduleId: string = uuidv4();
 
     const result: InsertOneResult<Document> = await this.db
       .collection(this.collectionName)
       .insertOne(
         {
+          scheduleId,
           ...createScheduleDto,
-          createdAt: now,
-          updatedAt: now,
-          deletedAt: null,
+          scheduledAt: new Date(createScheduleDto.scheduledAt),
+          createdAt: new Date(),
+          updatedAt: new Date(),
         },
         { checkKeys: false },
       );
 
-    return plainToInstance(Schedule, result.insertedId);
+    if (!result.insertedId) {
+      throw new ConflictException('Error to insert document');
+    }
+
+    return this.findOne(scheduleId);
   }
 
   async findAll(): Promise<Schedule[]> {
-    const results = await this.db
+    const results: WithId<Document>[] = await this.db
       .collection(this.collectionName)
       .find()
       .toArray();
 
-    return plainToInstance(Schedule, results);
+    return plainToInstance(Schedule, [...results]);
   }
 
   async getCurrentSchedule(): Promise<CurrentSchedule[]> {
     const aggPreviousLastImage = [
       {
         $match: {
-          scheduledTime: {
+          scheduledAt: {
             $lte: new Date(),
           },
         },
       },
       {
         $sort: {
-          scheduledTime: -1,
+          scheduledAt: -1,
         },
       },
       { $limit: 1 },
@@ -68,7 +79,7 @@ export class SchedulesService {
         $project: {
           type: 1,
           backgroundColor: 1,
-          scheduledTime: 1,
+          scheduledAt: 1,
           data: {
             $first: '$data.data',
           },
@@ -80,13 +91,13 @@ export class SchedulesService {
     const aggNextImages = [
       {
         $match: {
-          scheduledTime: {
+          scheduledAt: {
             $gte: new Date(),
           },
         },
       },
       {
-        $sort: { scheduledTime: 1 },
+        $sort: { scheduledAt: 1 },
       },
       { $limit: 7 },
       {
@@ -101,12 +112,11 @@ export class SchedulesService {
         $project: {
           type: 1,
           backgroundColor: 1,
-          scheduledTime: 1,
+          scheduledAt: 1,
           data: {
             $first: '$data.data',
           },
           title: { $first: '$data.title' },
-          title2: { $first: '$data.title' },
         },
       },
     ];
@@ -122,20 +132,40 @@ export class SchedulesService {
       .toArray();
 
     return [
-      ...plainToInstance(Schedule, lastImage),
-      ...plainToInstance(Schedule, nextImages),
+      ...plainToInstance(CurrentSchedule, lastImage),
+      ...plainToInstance(CurrentSchedule, nextImages),
     ];
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} schedule`;
+  async findOne(scheduleId: string): Promise<Schedule> {
+    const result: WithId<Document> = await this.db
+      .collection(this.collectionName)
+      .findOne({
+        scheduleId,
+      });
+
+    if (!result) {
+      throw new NotFoundException('The specified register does not exist');
+    }
+
+    return plainToInstance(Schedule, { ...result });
   }
 
-  update(id: number, updateScheduleDto: UpdateScheduleDto) {
-    return `This action updates a #${id} schedule using ${updateScheduleDto}`;
+  update(scheduleId: string, updateScheduleDto: UpdateScheduleDto) {
+    return `This action updates a #${scheduleId} schedule using ${updateScheduleDto}`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} schedule`;
+  async remove(scheduleId: string): Promise<boolean> {
+    const result: DeleteResult = await this.db
+      .collection(this.collectionName)
+      .deleteOne({
+        scheduleId,
+      });
+
+    if (result.deletedCount === 0) {
+      throw new NotFoundException('The specified register does not exist');
+    }
+
+    return true;
   }
 }

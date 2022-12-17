@@ -1,21 +1,39 @@
-import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsDateString,
+  IsObject,
+  IsUUID,
+  ValidateNested,
+} from 'class-validator';
 
-export class CreateScheduleDto {
+class SubDocumentImageDto {
+  @IsUUID()
+  @IsNotEmpty()
+  imageId: string;
+
   @IsString()
   @IsNotEmpty()
   title: string;
 
   @IsString()
+  @IsOptional()
+  backgroundColor: string;
+}
+
+export class CreateScheduleDto {
+  @IsString()
   @IsNotEmpty()
   type: string;
 
-  @IsString()
-  @IsOptional()
-  backgroundColor!: string;
-
-  scheduledTime: Date;
-
-  @IsString()
+  @IsDateString()
   @IsNotEmpty()
-  data: string;
+  scheduledAt: Date;
+
+  @IsObject()
+  @ValidateNested({ each: true })
+  @Type(() => SubDocumentImageDto)
+  image: SubDocumentImageDto;
 }

@@ -1,9 +1,33 @@
-import MongoSchema from 'src/shared/mongo.schema';
+import { Exclude, Expose } from 'class-transformer';
 
-export class Schedule extends MongoSchema {
+class SubDocumentImageDto {
+  @Expose()
+  imageId: string;
+
+  @Expose()
   title: string;
+
+  @Expose()
+  backgroundColor: string;
+}
+
+@Exclude()
+export class Schedule {
+  @Expose()
+  scheduleId: string;
+
+  @Expose()
   type: string;
-  backgroundColor?: string;
-  scheduledTime: Date;
-  data: string;
+
+  @Expose()
+  image: SubDocumentImageDto;
+
+  @Expose()
+  scheduledAt: Date;
+
+  @Expose()
+  createdAt: Date;
+
+  @Expose()
+  updatedAt: Date;
 }
