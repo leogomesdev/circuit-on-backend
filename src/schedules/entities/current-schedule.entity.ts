@@ -3,6 +3,12 @@ import { Exclude, Expose } from 'class-transformer';
 @Exclude()
 export class CurrentSchedule {
   @Expose()
+  scheduleId: string;
+
+  @Expose()
+  imageId: string;
+
+  @Expose()
   title: string;
 
   @Expose()

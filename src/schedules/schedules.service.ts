@@ -145,6 +145,9 @@ export class SchedulesService {
         $project: {
           scheduleId: '$currentSchedule.scheduleId',
           scheduledAt: '$currentSchedule.scheduledAt',
+          imageId: {
+            $first: '$imageData.imageId',
+          },
           title: {
             $first: '$imageData.title',
           },

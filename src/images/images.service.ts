@@ -23,7 +23,9 @@ export class ImagesService {
     file: Express.Multer.File,
   ): Promise<Image> {
     const imageId: string = uuidv4();
-    const data = file.buffer.toString('base64');
+    const encoding: BufferEncoding = 'base64';
+    const parsedImage: string = file.buffer.toString(encoding);
+    const data = `data:${file.mimetype};${encoding},${parsedImage}`;
     const result: InsertOneResult<Document> = await this.db
       .collection(this.collectionName)
       .insertOne({
