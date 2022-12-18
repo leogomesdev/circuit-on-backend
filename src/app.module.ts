@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { SchedulesModule } from './schedules/schedules.module';
 import { DatabaseModule } from './database/database.module';
 import { ImagesModule } from './images/images.module';
+import { CurrentSchedulesModule } from './current-schedules/current-schedules.module';
 import configuration from './config/configuration';
 
 @Module({
@@ -13,6 +14,7 @@ import configuration from './config/configuration';
     SchedulesModule,
     DatabaseModule,
     ImagesModule,
+    CurrentSchedulesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

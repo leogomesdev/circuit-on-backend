@@ -10,12 +10,13 @@ import {
   ParseFilePipe,
   FileTypeValidator,
   MaxFileSizeValidator,
-  ParseUUIDPipe,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ObjectId } from 'mongodb';
 import { ImagesService } from './images.service';
 import { CreateImageDto } from './dto/create-image.dto';
 import { Image } from './entities/image.entity';
+import { ParseObjectIdPipe } from 'src/pipes/parse-object-id.pipe';
 
 @Controller({
   path: 'images',
@@ -48,13 +49,13 @@ export class ImagesController {
     return this.imagesService.findAll();
   }
 
-  @Get(':imageId')
-  findOne(@Param('imageId', ParseUUIDPipe) imageId: string): Promise<Image> {
-    return this.imagesService.findOne(imageId);
+  @Get(':_id')
+  findOne(@Param('_id', ParseObjectIdPipe) _id: ObjectId): Promise<Image> {
+    return this.imagesService.findOne(_id);
   }
 
-  @Delete(':imageId')
-  remove(@Param('imageId', ParseUUIDPipe) imageId: string): Promise<void> {
-    return this.imagesService.remove(imageId);
+  @Delete(':_id')
+  remove(@Param('_id', ParseObjectIdPipe) _id: ObjectId): Promise<void> {
+    return this.imagesService.remove(_id);
   }
 }

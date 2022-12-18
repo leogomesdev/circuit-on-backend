@@ -1,8 +1,10 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, Transform, Type } from 'class-transformer';
 
-class SubDocumentImageDto {
+@Exclude()
+class SubDocumentImage {
   @Expose()
-  imageId: string;
+  @Transform(({ key, obj }) => obj[key])
+  _id: string;
 
   @Expose()
   title: string;
@@ -17,10 +19,12 @@ class SubDocumentImageDto {
 @Exclude()
 export class Schedule {
   @Expose()
-  scheduleId: string;
+  @Transform(({ key, obj }) => obj[key])
+  _id: string;
 
   @Expose()
-  image: SubDocumentImageDto;
+  @Type(() => SubDocumentImage)
+  image: SubDocumentImage;
 
   @Expose()
   scheduledAt: Date;

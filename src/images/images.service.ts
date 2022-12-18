@@ -4,9 +4,15 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Db, InsertOneResult, WithId, Document, DeleteResult } from 'mongodb';
+import {
+  Db,
+  InsertOneResult,
+  WithId,
+  Document,
+  DeleteResult,
+  ObjectId,
+} from 'mongodb';
 import { plainToInstance } from 'class-transformer';
-import { v4 as uuidv4 } from 'uuid';
 import { CreateImageDto } from './dto/create-image.dto';
 import { Image } from './entities/image.entity';
 
@@ -22,14 +28,12 @@ export class ImagesService {
     createImageDto: CreateImageDto,
     file: Express.Multer.File,
   ): Promise<Image> {
-    const imageId: string = uuidv4();
     const encoding: BufferEncoding = 'base64';
     const parsedImage: string = file.buffer.toString(encoding);
     const data = `data:${file.mimetype};${encoding},${parsedImage}`;
     const result: InsertOneResult<Document> = await this.db
       .collection(this.collectionName)
       .insertOne({
-        imageId,
         ...createImageDto,
         data,
         createdAt: new Date(),
@@ -40,7 +44,7 @@ export class ImagesService {
       throw new ConflictException('Error to insert document');
     }
 
-    return this.findOne(imageId);
+    return this.findOne(result.insertedId);
   }
 
   async findAll(): Promise<Image[]> {
@@ -52,12 +56,10 @@ export class ImagesService {
     return plainToInstance(Image, [...results]);
   }
 
-  async findOne(imageId: string): Promise<Image> {
+  async findOne(_id: ObjectId): Promise<Image> {
     const result: WithId<Document> = await this.db
       .collection(this.collectionName)
-      .findOne({
-        imageId,
-      });
+      .findOne({ _id });
 
     if (!result) {
       throw new NotFoundException('The specified register does not exist');
@@ -66,22 +68,20 @@ export class ImagesService {
     return plainToInstance(Image, { ...result });
   }
 
-  async remove(imageId: string): Promise<void> {
+  async remove(_id: ObjectId): Promise<void> {
     const resultSchedulesCleanUp: DeleteResult = await this.db
       .collection('schedules')
       .deleteMany({
-        'image.imageId': imageId,
+        'image._id': _id,
       });
 
     console.log(
-      `${resultSchedulesCleanUp.deletedCount} schedules of the image with imageId: ${imageId} were removed`,
+      `${resultSchedulesCleanUp.deletedCount} schedules of the image with _id: ${_id} were removed`,
     );
 
     const result: DeleteResult = await this.db
       .collection(this.collectionName)
-      .deleteOne({
-        imageId,
-      });
+      .deleteOne({ _id });
 
     if (result.deletedCount === 0) {
       throw new NotFoundException('The specified register does not exist');

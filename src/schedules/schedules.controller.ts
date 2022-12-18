@@ -1,16 +1,9 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  Delete,
-  ParseUUIDPipe,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import { ObjectId } from 'mongodb';
 import { SchedulesService } from './schedules.service';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
-import { CurrentSchedule } from './entities/current-schedule.entity';
 import { Schedule } from './entities/schedule.entity';
+import { ParseObjectIdPipe } from 'src/pipes/parse-object-id.pipe';
 
 @Controller({
   path: 'schedules',
@@ -34,22 +27,13 @@ export class SchedulesController {
     return this.schedulesService.findFutureDocs();
   }
 
-  @Get('/current')
-  getCurrentSchedule(): Promise<CurrentSchedule[]> {
-    return this.schedulesService.getCurrentSchedule();
+  @Get(':_id')
+  findOne(@Param('_id', ParseObjectIdPipe) _id: ObjectId): Promise<Schedule> {
+    return this.schedulesService.findOne(_id);
   }
 
-  @Get(':scheduleId')
-  findOne(
-    @Param('scheduleId', ParseUUIDPipe) scheduleId: string,
-  ): Promise<Schedule> {
-    return this.schedulesService.findOne(scheduleId);
-  }
-
-  @Delete(':scheduleId')
-  remove(
-    @Param('scheduleId', ParseUUIDPipe) scheduleId: string,
-  ): Promise<void> {
-    return this.schedulesService.remove(scheduleId);
+  @Delete(':_id')
+  remove(@Param('_id', ParseObjectIdPipe) _id: ObjectId): Promise<void> {
+    return this.schedulesService.remove(_id);
   }
 }

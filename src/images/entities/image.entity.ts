@@ -1,9 +1,10 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, Transform } from 'class-transformer';
 
 @Exclude()
 export class Image {
   @Expose()
-  imageId: string;
+  @Transform(({ key, obj }) => obj[key])
+  _id: string;
 
   @Expose()
   title: string;

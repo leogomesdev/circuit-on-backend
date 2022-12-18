@@ -1,11 +1,15 @@
-import { IsNotEmpty, IsDateString, IsUUID } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { IsNotEmpty, IsDateString } from 'class-validator';
+import { ObjectId } from 'mongodb';
+import { toMongoObjectId } from 'src/transformers/to-mongo-object-id.transformer';
 
 export class CreateScheduleDto {
   @IsDateString()
   @IsNotEmpty()
   scheduledAt: Date;
 
-  @IsUUID()
   @IsNotEmpty()
-  imageId: string;
+  @Type(() => ObjectId)
+  @Transform(toMongoObjectId)
+  imageId: ObjectId;
 }
