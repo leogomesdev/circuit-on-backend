@@ -16,7 +16,7 @@ import {
 import { plainToInstance } from 'class-transformer';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { Schedule } from './entities/schedule.entity';
-import { Image } from 'src/images/entities/image.entity';
+import { Image } from 'src/api-modules/images/entities/image.entity';
 import { ImageNestedDocument } from './classes/image-nested-document.class';
 
 @Injectable()
