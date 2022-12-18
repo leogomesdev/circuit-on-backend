@@ -16,7 +16,5 @@ import configuration from './config/configuration';
     ImagesModule,
     CurrentSchedulesModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
