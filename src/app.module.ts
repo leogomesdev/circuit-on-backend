@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { SchedulesModule } from './schedules/schedules.module';
+import { SchedulesModule } from './api-modules/schedules/schedules.module';
 import { DatabaseModule } from './database/database.module';
-import { SharedModule } from './shared/shared.module';
+import { ImagesModule } from './api-modules/images/images.module';
+import { CurrentSchedulesModule } from './api-modules/current-schedules/current-schedules.module';
 import configuration from './config/configuration';
 
 @Module({
@@ -12,9 +11,8 @@ import configuration from './config/configuration';
     ConfigModule.forRoot({ isGlobal: true, load: [configuration] }),
     SchedulesModule,
     DatabaseModule,
-    SharedModule,
+    ImagesModule,
+    CurrentSchedulesModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

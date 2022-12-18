@@ -1,21 +1,15 @@
 import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
 
-export class CreateScheduleDto {
+export class CreateImageDto {
   @IsString()
   @IsNotEmpty()
   title: string;
 
   @IsString()
-  @IsNotEmpty()
-  type: string;
-
-  @IsString()
   @IsOptional()
-  backgroundColor!: string;
-
-  scheduledTime: Date;
+  backgroundColor: string;
 
   @IsString()
   @IsNotEmpty()
-  data: string;
+  category: string;
 }
