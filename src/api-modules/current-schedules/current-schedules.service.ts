@@ -10,7 +10,9 @@ export class CurrentSchedulesService {
     @Inject('DATABASE_CONNECTION')
     private db: Db,
   ) {}
-  async getCurrentSchedule(): Promise<CurrentSchedule[]> {
+  async getCurrentSchedule(
+    limitFutureItems: number,
+  ): Promise<CurrentSchedule[]> {
     const aggregationPipeline = [
       {
         $facet: {
@@ -40,7 +42,7 @@ export class CurrentSchedulesService {
             {
               $sort: { scheduledAt: 1 },
             },
-            { $limit: 7 },
+            { $limit: limitFutureItems },
           ],
         },
       },

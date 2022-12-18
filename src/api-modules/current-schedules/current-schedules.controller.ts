@@ -1,5 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { CurrentSchedulesService } from './current-schedules.service';
+import { CurrentScheduleDto } from './dto/current-schedule.dto';
 import { CurrentSchedule } from './entities/current-schedule.entity';
 
 @Controller({
@@ -12,7 +13,11 @@ export class CurrentSchedulesController {
   ) {}
 
   @Get()
-  getCurrentSchedule(): Promise<CurrentSchedule[]> {
-    return this.currentSchedulesService.getCurrentSchedule();
+  getCurrentSchedule(
+    @Query() currentScheduleDto: CurrentScheduleDto,
+  ): Promise<CurrentSchedule[]> {
+    return this.currentSchedulesService.getCurrentSchedule(
+      currentScheduleDto.maxFutureItems,
+    );
   }
 }
