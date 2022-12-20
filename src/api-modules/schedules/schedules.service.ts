@@ -69,8 +69,6 @@ export class SchedulesService {
       .find()
       .toArray();
 
-    console.log(results);
-
     return plainToInstance(Schedule, [...results]);
   }
 
