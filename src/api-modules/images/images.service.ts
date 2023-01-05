@@ -15,6 +15,7 @@ import {
 import { plainToInstance } from 'class-transformer';
 import { CreateImageDto } from './dto/create-image.dto';
 import { Image } from './entities/image.entity';
+import { ImagesByCategory } from './entities/images-by-category.entity';
 
 @Injectable()
 export class ImagesService {
@@ -66,6 +67,43 @@ export class ImagesService {
     }
 
     return plainToInstance(Image, { ...result });
+  }
+
+  async getGroupedByCategory(): Promise<ImagesByCategory[]> {
+    const aggregationPipeline = [
+      {
+        $group: {
+          _id: '$category',
+          images: {
+            $push: {
+              _id: '$_id',
+              title: '$title',
+              updatedAt: '$updatedAt',
+            },
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+          'images.updatedAt': -1,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          category: '$_id',
+          images: '$images',
+        },
+      },
+    ];
+
+    const data: Document[] = await this.db
+      .collection(this.collectionName)
+      .aggregate(aggregationPipeline)
+      .toArray();
+
+    return [...plainToInstance(ImagesByCategory, data)];
   }
 
   async remove(_id: ObjectId): Promise<void> {
