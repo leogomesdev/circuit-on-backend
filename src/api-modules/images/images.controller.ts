@@ -13,9 +13,10 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ObjectId } from 'mongodb';
-import { ImagesService } from './images.service';
 import { CreateImageDto } from './dto/create-image.dto';
 import { Image } from './entities/image.entity';
+import { ImagesByCategory } from './entities/images-by-category.entity';
+import { ImagesService } from './images.service';
 import { ParseObjectIdPipe } from 'src/pipes/parse-object-id.pipe';
 
 @Controller({
@@ -47,6 +48,11 @@ export class ImagesController {
   @Get()
   findAll(): Promise<Image[]> {
     return this.imagesService.findAll();
+  }
+
+  @Get('/grouped-by-category')
+  getGroupedByCategory(): Promise<ImagesByCategory[]> {
+    return this.imagesService.getGroupedByCategory();
   }
 
   @Get(':_id')
