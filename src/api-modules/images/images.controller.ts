@@ -10,8 +10,10 @@ import {
   ParseFilePipe,
   FileTypeValidator,
   MaxFileSizeValidator,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { AuthGuard } from '@nestjs/passport';
 import { ObjectId } from 'mongodb';
 import { CreateImageDto } from './dto/create-image.dto';
 import { Image } from './entities/image.entity';
@@ -23,6 +25,7 @@ import { ParseObjectIdPipe } from 'src/pipes/parse-object-id.pipe';
   path: 'images',
   version: '1',
 })
+@UseGuards(AuthGuard('bearer'))
 export class ImagesController {
   constructor(private readonly imagesService: ImagesService) {}
 
