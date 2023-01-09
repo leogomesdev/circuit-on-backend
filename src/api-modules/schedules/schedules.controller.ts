@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ObjectId } from 'mongodb';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
-import { ParseObjectIdPipe } from 'src/pipes/parse-object-id.pipe';
+import { ParseObjectIdPipe } from '../../pipes/parse-object-id.pipe';
 import { Schedule } from './entities/schedule.entity';
 import { SchedulesService } from './schedules.service';
 

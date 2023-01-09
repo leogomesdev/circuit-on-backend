@@ -7,13 +7,13 @@ export class AuthService {
   private oktaVerifier: any;
   private audience: string;
 
-  constructor(config: ConfigService) {
+  constructor(configService: ConfigService) {
     this.oktaVerifier = new OktaJwtVerifier({
-      issuer: config.get('OKTA_ISSUER'),
-      clientId: config.get('OKTA_CLIENTID'),
+      issuer: configService.get<string>('okta.issuer'),
+      clientId: configService.get<string>('okta.clientId'),
     });
 
-    this.audience = config.get('OKTA_AUDIENCE');
+    this.audience = configService.get<string>('okta.audience');
   }
 
   async validateToken(token: string): Promise<any> {

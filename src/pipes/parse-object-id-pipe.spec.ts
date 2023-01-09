@@ -1,7 +1,7 @@
-import { ParseObjectIdPipePipe } from './parse-object-id.pipe';
+import { ParseObjectIdPipe } from './parse-object-id.pipe';
 
 describe('ParseObjectIdPipePipe', () => {
   it('should be defined', () => {
-    expect(new ParseObjectIdPipePipe()).toBeDefined();
+    expect(new ParseObjectIdPipe()).toBeDefined();
   });
 });
