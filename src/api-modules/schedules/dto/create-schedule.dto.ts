@@ -1,7 +1,7 @@
 import { Transform, Type } from 'class-transformer';
 import { IsNotEmpty, IsDateString } from 'class-validator';
 import { ObjectId } from 'mongodb';
-import { toMongoObjectId } from 'src/transformers/to-mongo-object-id.transformer';
+import { toMongoObjectId } from '../../../transformers/to-mongo-object-id.transformer';
 
 export class CreateScheduleDto {
   @IsDateString()

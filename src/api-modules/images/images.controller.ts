@@ -19,7 +19,7 @@ import { CreateImageDto } from './dto/create-image.dto';
 import { Image } from './entities/image.entity';
 import { ImagesByCategory } from './entities/images-by-category.entity';
 import { ImagesService } from './images.service';
-import { ParseObjectIdPipe } from 'src/pipes/parse-object-id.pipe';
+import { ParseObjectIdPipe } from '../../pipes/parse-object-id.pipe';
 
 @Controller({
   path: 'images',

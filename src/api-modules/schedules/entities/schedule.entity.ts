@@ -1,7 +1,7 @@
 import { Exclude, Expose, Transform, Type } from 'class-transformer';
 
 @Exclude()
-class SubDocumentImage {
+export class SubDocumentImage {
   @Expose()
   @Transform(({ key, obj }) => obj[key])
   _id: string;
