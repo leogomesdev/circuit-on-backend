@@ -13,6 +13,13 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiHeader,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { ObjectId } from 'mongodb';
 import { CreateImageDto } from './dto/create-image.dto';
@@ -26,13 +33,21 @@ import { ParseObjectIdPipe } from '../../pipes/parse-object-id.pipe';
   version: '1',
 })
 @UseGuards(AuthGuard('bearer'))
+@ApiUnauthorizedResponse({ description: 'Unauthorized' })
+@ApiTags('images')
+@ApiBearerAuth()
+@ApiHeader({
+  name: 'Authorization',
+  description: 'Bearer token',
+  required: true,
+  example: 'Bearer AAAA',
+})
 export class ImagesController {
   constructor(private readonly imagesService: ImagesService) {}
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
-  //@ApiConsumes('multipart/form-data')
-  //@ApiImplicitFile({ name: 'file', required: true })
+  @ApiConsumes('multipart/form-data')
   create(
     @Body() createImageDto: CreateImageDto,
     @UploadedFile(

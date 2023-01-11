@@ -72,6 +72,12 @@ export class ImagesService {
   async getGroupedByCategory(): Promise<ImagesByCategory[]> {
     const aggregationPipeline = [
       {
+        $sort: {
+          category: 1,
+          updatedAt: -1,
+        },
+      },
+      {
         $group: {
           _id: '$category',
           images: {
@@ -84,16 +90,15 @@ export class ImagesService {
         },
       },
       {
-        $sort: {
-          _id: 1,
-          'images.updatedAt': -1,
-        },
-      },
-      {
         $project: {
           _id: 0,
           category: '$_id',
           images: '$images',
+        },
+      },
+      {
+        $sort: {
+          category: 1,
         },
       },
     ];

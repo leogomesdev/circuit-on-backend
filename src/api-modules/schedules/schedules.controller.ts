@@ -8,6 +8,12 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiHeader,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { ObjectId } from 'mongodb';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { ParseObjectIdPipe } from '../../pipes/parse-object-id.pipe';
@@ -19,6 +25,15 @@ import { SchedulesService } from './schedules.service';
   version: '1',
 })
 @UseGuards(AuthGuard('bearer'))
+@ApiUnauthorizedResponse({ description: 'Unauthorized' })
+@ApiTags('schedules')
+@ApiBearerAuth()
+@ApiHeader({
+  name: 'Authorization',
+  description: 'Bearer token',
+  required: true,
+  example: 'Bearer AAAA',
+})
 export class SchedulesController {
   constructor(private readonly schedulesService: SchedulesService) {}
 
