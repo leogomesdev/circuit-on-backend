@@ -1,0 +1,349 @@
+{
+	"info": {
+		"_postman_id": "ce907843-22d8-42ff-9379-d086ed9e551e",
+		"name": "NestJS API - CIRCUIT ON",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24798910"
+	},
+	"item": [
+		{
+			"name": "/v1/schedules",
+			"item": [
+				{
+					"name": "Get all Schedules",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/schedules",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"schedules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a Schedule",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"scheduledAt\": \"2022-12-18T18:50:00.000-0500\",\n    \"imageId\": \"639f1e04ed3c9d5abb90908a\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/schedules",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"schedules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Schedule by _id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/schedules/639ea8d8fa0686de070afc8b",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"schedules",
+								"639ea8d8fa0686de070afc8b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Schedule by _id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/schedules/639ea8a76d37f5c6ab7f91e2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"schedules",
+								"639ea8a76d37f5c6ab7f91e2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get future Schedules",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/schedules/future",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"schedules",
+								"future"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/v1/images",
+			"item": [
+				{
+					"name": "Get all Images",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/images",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"images"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get images grouped by category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/images/grouped-by-category",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"images",
+								"grouped-by-category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create an Image",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "title",
+									"value": "Battle ropes 2",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "CROSSFIT",
+									"type": "text"
+								},
+								{
+									"key": "backgroundColor",
+									"value": "#CC00AA",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/images",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"images"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get an Image by _id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/images/639ea83f6d37f5c6ab7f91cf",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"images",
+								"639ea83f6d37f5c6ab7f91cf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete an Image by _id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/images/639ea8816d37f5c6ab7f91d9",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"images",
+								"639ea8816d37f5c6ab7f91d9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/v1/current-schedules",
+			"item": [
+				{
+					"name": "Get current Schedules",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/current-schedules?maxFutureItems=8",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"current-schedules"
+							],
+							"query": [
+								{
+									"key": "maxFutureItems",
+									"value": "8"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "headerPrefix",
+				"value": "Bearer",
+				"type": "string"
+			},
+			{
+				"key": "client_authentication",
+				"value": "body",
+				"type": "string"
+			},
+			{
+				"key": "state",
+				"value": "asdasd",
+				"type": "string"
+			},
+			{
+				"key": "scope",
+				"value": "openid email profile",
+				"type": "string"
+			},
+			{
+				"key": "authUrl",
+				"value": "{{oktaDomain}}/oauth2/default/v1/authorize",
+				"type": "string"
+			},
+			{
+				"key": "grant_type",
+				"value": "authorization_code_with_pkce",
+				"type": "string"
+			},
+			{
+				"key": "code_verifier",
+				"value": "",
+				"type": "string"
+			},
+			{
+				"key": "accessTokenUrl",
+				"value": "{{oktaDomain}}/oauth2/default/v1/token",
+				"type": "string"
+			},
+			{
+				"key": "clientId",
+				"value": "{{oktaClientId}}",
+				"type": "string"
+			},
+			{
+				"key": "useBrowser",
+				"value": true,
+				"type": "boolean"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
