@@ -7,10 +7,16 @@
 
 <p align="center">Build with <a href="https://nestjs.com" target="_blank">NestJS</a> framework</p>
 <p align="center">
-<a href="#" target="_blank"><img src="https://img.shields.io/badge/coverage-57.18%25-orange" alt="Coverage" /></a>
+<a href="#" target="_blank">
+<img src="https://img.shields.io/badge/coverage-57.18%25-orange" alt="Coverage" />
+</a>
 </p>
 
 # 🌐 CIRCUIT ON
+
+See application structure on the image below:
+
+![System tiers](docs/images/others/tiers.png)
 
 This is the Backend application.
 
@@ -18,7 +24,11 @@ For Frontend application, please go to [https://github.com/leogomesdev/circuit-o
 
 ## 📚 Description
 
-This project provides APIs for the frontend application
+This project provides APIs for the frontend application.
+
+Not sure about how a REST API works? See on the image below:
+
+![API Workflow](docs/images/others/api-flowchart.png)
 
 ## 📲 Main technologies used
 
@@ -33,6 +43,8 @@ This project provides APIs for the frontend application
 
 ## 💡 Requirements
 
+You must create an OKTA Application (for Authentication). Follow [this doc for instructions](docs/okta.md), to get your **Client Id** and **Domain/Issuer**
+
 ### 💻 For local usage:
 
 - [Node.js](https://nodejs.org) (v16 or v18)
@@ -44,16 +56,13 @@ This project provides APIs for the frontend application
 ### 💻 Locally
 
 - Be sure to install the [requirements](#requirements)
-- If using [nvm](github.com/nvm-sh/nvm), you can easily run:
 
-  ```bash
-  $ nvm use
-  ```
+  - If you have [nvm - Node Version Manager](https://github.com/nvm-sh/nvm) installed, you could just run `nvm install` and it will install the correct version of Node.js based on file `.nvmrc`
 
 - Create .env file:
 
   ```bash
-  $ cp -v .env.example .env
+    cp -v .env.example .env
   ```
 
 - Edit .env file to provide the required environment variables.
@@ -61,34 +70,34 @@ This project provides APIs for the frontend application
 - Install dependencies:
 
   ```bash
-  $ npm install
+    npm install
   ```
 
 - Start the application:
 
   ```bash
-  # development
-  $ npm run start
+    # development
+    npm run start
 
-  # watch mode
-  $ npm run start:dev
+    # watch mode
+    npm run start:dev
   ```
 
-### Production Environment
+### ☁ Production Environment
 
 Follow [this doc for instructions](docs/deploy-aws-runner.md)
 
 ### ✅ Tests
 
 ```bash
-# unit tests
-$ npm run test
+  # unit tests
+  npm run test
 
-# test coverage
-$ npm run test:cov
+  # test coverage
+  npm run test:cov
 ```
 
-## MongoDB Indexes
+## 🗂 MongoDB Indexes
 
 Please create indexes for supporting your application complex aggregation pipelines.
 Follow [this doc for instructions](docs/mongodb-indexes.md)
@@ -101,5 +110,4 @@ To generate and download a Swagger JSON file, navigate to [http://localhost:3000
 
 ### 👀 TL;DR
 
-1. Create an OKTA Application (for Authentication). Follow [this doc for instructions](docs/okta.md)
-2. Open Postman and make API calls. Follow [this doc for instructions](docs/postman.md)
+1. Open Postman and make API calls. Follow [this doc for instructions](docs/postman.md)
