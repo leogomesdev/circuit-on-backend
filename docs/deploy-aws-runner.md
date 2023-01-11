@@ -1,26 +1,28 @@
-# 🌐 CIRCUIT ON
+# 🌐 CIRCUIT ON (Backend)
 
 ## ☁ Using AWS App Runner
 
-If using AWS App Runner, set the build settings as below:
+If using AWS App Runner, set the **Build Settings** as below:
 
 - Build command:
 
   ```bash
-  npm install && npm run build
+    npm install && npm run build
   ```
 
 - Start command:
 
   ```bash
-  npm run start:prod
+    npm run start:prod
   ```
 
 - Port:
 
   ```bash
-  3000
+    3000
   ```
+
+At the **Service Settings** section **Environment Variables**, add each variable as mentioned on file [.env.example](.env.example)
 
 ### 📝 Docs and external resources:
 
