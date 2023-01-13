@@ -41,6 +41,15 @@ Not sure about how a REST API works? See on the image below:
 - [Commitizen command line tool](https://github.com/commitizen/cz-cli)
 - [Conventional Commits specification](https://www.conventionalcommits.org/en/v1.0.0/)
 
+### 📝 Lint
+
+This project uses [ESLint](https://eslint.org) packages to ensure code inspection and formatting.
+If you change the code, make sure to run the command below for code inspection:
+
+```bash
+npm run lint
+```
+
 ## 💡 Requirements
 
 You must create an OKTA Application (for Authentication). Follow [this doc for instructions](docs/okta.md), to get your **Client Id** and **Domain/Issuer**
