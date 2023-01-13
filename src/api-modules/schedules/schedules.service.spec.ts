@@ -7,6 +7,7 @@ import { MockFactory } from '../../test/mock.factory';
 describe('SchedulesService', () => {
   let service: SchedulesService;
   let findToArrayMockResponse = [];
+  let db: Db;
 
   const mockDb = () => {
     return {
@@ -44,6 +45,7 @@ describe('SchedulesService', () => {
   });
 
   it('should be defined', () => {
+    expect(db).toBeDefined();
     expect(service).toBeDefined();
   });
 
