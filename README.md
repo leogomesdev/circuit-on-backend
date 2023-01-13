@@ -94,7 +94,7 @@ You must create an OKTA Application (for Authentication). Follow [this doc for i
 
 ### ☁ Production Environment
 
-Follow [this doc for instructions](docs/deploy-aws-runner.md)
+Follow [this doc for instructions](docs/deploy-aws-app-runner.md)
 
 ### ✅ Tests
 
