@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { plainToInstance } from 'class-transformer';
 import { Db } from 'mongodb';
 import { Schedule } from './entities/schedule.entity';
 import { SchedulesService } from './schedules.service';
@@ -7,7 +6,6 @@ import { MockFactory } from '../../test/mock.factory';
 
 describe('SchedulesService', () => {
   let service: SchedulesService;
-  let db: Db;
   let findToArrayMockResponse = [];
 
   const mockDb = () => {

@@ -6,7 +6,6 @@ import { MockFactory } from '../../test/mock.factory';
 
 describe('CurrentSchedulesService', () => {
   let service: CurrentSchedulesService;
-  let db: Db;
   let aggregateToArrayMockResponse = [];
 
   const mockDb = () => {
