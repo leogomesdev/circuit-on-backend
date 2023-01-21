@@ -1,12 +1,5 @@
 {
   "version": 2,
-  "env": {
-    "DATABASE_HOST": "@database_host",
-    "DATABASE_NAME": "@database_name",
-    "OKTA_AUDIENCE": "@okta_audience",
-    "OKTA_CLIENTID": "@okta_clientid",
-    "OKTA_ISSUER": "@okta_issuer"
-  },
   "builds": [
     {
       "src": "src/main.ts",
