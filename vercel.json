@@ -1,11 +1,11 @@
 {
   "version": 2,
   "env": {
-    "DATABASE_HOST": "@DATABASE_HOST",
-    "DATABASE_NAME": "@DATABASE_NAME",
-    "OKTA_AUDIENCE": "@OKTA_AUDIENCE",
-    "OKTA_CLIENTID": "@OKTA_CLIENTID",
-    "OKTA_ISSUER": "@OKTA_ISSUER"
+    "DATABASE_HOST": "@database_host",
+    "DATABASE_NAME": "@database_name",
+    "OKTA_AUDIENCE": "@okta_audience",
+    "OKTA_CLIENTID": "@okta_clientid",
+    "OKTA_ISSUER": "@okta_issuer"
   },
   "builds": [
     {
