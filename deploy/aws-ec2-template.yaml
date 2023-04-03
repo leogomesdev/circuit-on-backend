@@ -1,0 +1,105 @@
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 key pair for SSH access to the EC2 instance.
+    Type: AWS::EC2::KeyPair::KeyName
+
+  SSHLocation:
+    Description: The IP address range that can be used to SSH to the EC2 instances
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+    Default: 0.0.0.0/0
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+
+  ImageId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-20230115
+
+  DATABASEHOST:
+    Description: App Env Variable
+    Type: String
+
+Resources:
+  WebServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref ImageId
+      InstanceType: t2.micro
+      KeyName: !Ref KeyName
+      SecurityGroups:
+        - !Ref WebServerSecurityGroup
+      UserData:
+        Fn::Base64: |
+           #!/bin/bash
+           sudo apt-get update -y
+           sudo apt-get install git -y
+           curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+           sudo apt-get install nodejs -y
+           sudo npm install yarn pm2 -g
+           git clone https://github.com/leogomesdev/circuit-on-backend
+           cd circuit-on-backend
+           npm install
+           // create .env file
+DATABASE_HOST="mongodb+srv://circuit-on:4oASLGYSj3Ql7DFm@cluster0.jpgst2g.mongodb.net"
+DATABASE_NAME="circuit-on-app"
+OKTA_CLIENTID="0oa81k105y8cUMUBm5d7"
+OKTA_ISSUER="https://dev-32478883.okta.com/oauth2/default"
+OKTA_AUDIENCE="api://default"
+           sudo yarn pm2:deploy:app
+           pm2 delete all
+           sudo apt install nginx -y
+           sudo rm /etc/nginx/sites-available/default
+           sudo nano /etc/nginx/sites-available/default
+
+//////
+server_name circuitonkyback.leogomes.dev www.circuitonkyback.leogomes.dev;
+client_max_body_size 10M;
+location / {
+    proxy_pass http://localhost:3000; # your app's port
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_cache_bypass $http_upgrade;
+}
+/////
+server {
+  server_name _;
+  client_max_body_size 20M;
+  location / {
+    proxy_pass http://localhost:3000; # your app's port
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_cache_bypass $http_upgrade;
+  }
+}
+///////
+           sudo service nginx restart
+           sudo add-apt-repository ppa:certbot/certbot -y
+           sudo apt-get update
+           sudo apt-get install python3-certbot-nginx -y
+           sudo certbot --nginx -d https://3.92.45.11 -n -m circuitonky@gmail.com --agree-tos
+           //sudo certbot --nginx -d www.circuitonkyback.leogomes.dev -n -m leogomesdev@gmail.com --agree-tos
+do not need to add manually, is already populated:
+  https://www.baeldung.com/linux/letsencrypt-renew-ssl-certificate-automatically
+anyway I added to frontend, lets see
+sudo crontab -e
+0 12 * * * /usr/bin/certbot renew --quiet
+sudo /etc/init.d/cron restart
+
+  WebServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Enable HTTP access via port 80 + SSH access"
+      SecurityGroupIngress:
+      - CidrIp: 0.0.0.0/0
+        FromPort: 80
+        IpProtocol: tcp
+        ToPort: 3000
+      - CidrIp: !Ref SSHLocation
+        FromPort: 22
+        IpProtocol: tcp
+        ToPort: 22
